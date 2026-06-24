@@ -1,0 +1,157 @@
+/**
+ * Navigator Design System Tokens
+ * Mirrored from libs/enterprise-fingerprint/04-ux-zone/design-system/tokens/tokens.css
+ * Single source of truth for styling. Never hardcode values.
+ */
+
+:root {
+  /* PRIMARY (Teal/Cyan) */
+  --color-primary-10: #E6F7F7;
+  --color-primary-20: #B3E8E8;
+  --color-primary-30: #80D9D9;
+  --color-primary-40: #4DCACA;
+  --color-primary-50: #1ABBBB;
+  --color-primary-60: #159999;
+  --color-primary-70: #107777;
+
+  /* SECONDARY (Pink/Magenta) */
+  --color-secondary-10: #FCE4F0;
+  --color-secondary-50: #E82088;
+  --color-secondary-60: #C71A70;
+  --color-secondary-70: #9F1559;
+
+  /* EXTENDED - Orange */
+  --color-orange-10: #FFF4E6;
+  --color-orange-50: #FFA41A;
+  --color-orange-60: #E68A00;
+  --color-orange-70: #B36B00;
+
+  /* EXTENDED - Blue */
+  --color-blue-10: #E6F2FF;
+  --color-blue-50: #1A96FF;
+  --color-blue-60: #0077CC;
+  --color-blue-70: #005999;
+
+  /* EXTENDED - Purple */
+  --color-purple-10: #F3E6FF;
+  --color-purple-50: #9B1AFF;
+  --color-purple-60: #7A00CC;
+  --color-purple-70: #5C0099;
+
+  /* EXTENDED - Yellow */
+  --color-yellow-10: #FFFCE6;
+  --color-yellow-60: #E6D400;
+
+  /* SUCCESS (Green) */
+  --color-success-10: #E6F7ED;
+  --color-success-50: #1ABB5D;
+  --color-success-60: #159947;
+  --color-success-70: #107731;
+
+  /* ERROR (Red) */
+  --color-error-10: #FFEBE6;
+  --color-error-50: #FF471A;
+  --color-error-60: #E63800;
+  --color-error-70: #B32C00;
+
+  /* GREYSCALE */
+  --color-grey-100: #000000;
+  --color-grey-90: #1A1A1A;
+  --color-grey-80: #333333;
+  --color-grey-70: #4D4D4D;
+  --color-grey-60: #666666;
+  --color-grey-50: #808080;
+  --color-grey-40: #999999;
+  --color-grey-30: #B3B3B3;
+  --color-grey-20: #CCCCCC;
+  --color-grey-10: #E6E6E6;
+  --color-white: #FFFFFF;
+
+  /* SURFACE */
+  --surface-light: var(--color-grey-10);
+  --surface-white: var(--color-white);
+  --surface-dark: var(--color-grey-80);
+
+  /* BORDER */
+  --border-light: var(--color-grey-10);
+  --border-default: var(--color-grey-20);
+  --border-medium: var(--color-grey-30);
+
+  /* TEXT */
+  --text-primary: var(--color-grey-100);
+  --text-secondary: var(--color-grey-60);
+  --text-tertiary: var(--color-grey-50);
+  --text-disabled: var(--color-grey-30);
+  --text-inverse: var(--color-white);
+
+  /* INTERACTIVE */
+  --interactive-primary-default: var(--color-primary-60);
+  --interactive-primary-hover: var(--color-primary-70);
+  --interactive-primary-disabled: var(--color-grey-30);
+  --interactive-secondary-default: var(--color-secondary-60);
+
+  /* FEEDBACK */
+  --feedback-error-text: var(--color-error-60);
+  --feedback-error-bg: var(--color-error-10);
+  --feedback-error-border: var(--color-error-50);
+  --feedback-success-text: var(--color-success-60);
+  --feedback-success-bg: var(--color-success-10);
+  --feedback-success-border: var(--color-success-50);
+  --feedback-warning-text: var(--color-orange-60);
+  --feedback-warning-bg: var(--color-orange-10);
+  --feedback-info-text: var(--color-blue-60);
+  --feedback-info-bg: var(--color-blue-10);
+
+  /* TYPOGRAPHY */
+  --font-family-heading: 'Lexend', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-family-primary: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-family-mono: 'SF Mono', 'Monaco', 'Cascadia Code', 'Courier New', monospace;
+
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+
+  --text-h1: 36px;
+  --text-h2: 32px;
+  --text-h3: 28px;
+  --text-h4: 24px;
+  --text-h5: 20px;
+  --text-h6: 18px;
+  --text-body-lg: 18px;
+  --text-body-base: 16px;
+  --text-body-sm: 14px;
+  --text-body-xs: 12px;
+  --text-label-sm: 12px;
+  --text-label-xs: 10px;
+
+  --line-height-heading: 1.25;
+  --line-height-base: 1.5;
+
+  /* SPACING */
+  --space-2: 2px;
+  --space-4: 4px;
+  --space-8: 8px;
+  --space-12: 12px;
+  --space-16: 16px;
+  --space-20: 20px;
+  --space-24: 24px;
+  --space-32: 32px;
+  --space-40: 40px;
+
+  /* RADIUS */
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 24px;
+  --radius-full: 9999px;
+
+  /* SHADOWS */
+  --shadow-sm: 0px 2px 4px 0px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0px 4px 8px 0px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0px 8px 16px 0px rgba(0, 0, 0, 0.16);
+  --shadow-focus-primary: 0px 0px 0px 3px rgba(21, 153, 153, 0.2);
+}
