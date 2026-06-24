@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Navigator CRM – Project Admin Console</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;600;700;800&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="tokens.css" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<!-- NAVBAR -->
+<header class="navbar">
+  <div class="navbar__inner">
+    <div class="navbar__brand">
+      <div class="navbar__logo">N</div>
+      <div>
+        <span class="navbar__title">Navigator CRM</span>
+        <span class="navbar__module">· Project Admin Console</span>
+      </div>
+    </div>
+    <div class="navbar__right">
+      <div class="navbar__user">
+        <span>Business Head</span>
+        <span class="avatar avatar--sm">BH</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- TABS -->
+<nav class="tabs">
+  <div class="tabs__inner">
+    <button class="tab active" data-tab="projects">Projects</button>
+    <button class="tab" data-tab="simulator">Customer Auto-Assignment</button>
+    <button class="tab" data-tab="workflow">S0–S7 Workflow</button>
+  </div>
+</nav>
+
+<!-- ================= PROJECTS ================= -->
+<main class="container page active" id="page-projects">
+  <!-- LIST -->
+  <div id="projects-list">
+    <div class="page-head">
+      <div>
+        <div class="page-head__eyebrow">Project = Sales line · the container</div>
+        <h1>Projects</h1>
+        <p>Each project is a sales line defined by parameter metadata. A project can have <b>zones</b> (Div/ZM layer)
+        or be <b>zone-less &amp; pan-India</b> (e.g. Digital). When a customer lands in the client DB, the engine matches
+        these parameters to route the lead. Projects can be created or dismantled anytime – the S0–S7 workflow never changes.</p>
+      </div>
+      <div class="page-head__actions">
+        <button class="btn btn--secondary" id="btn-reset">Reset demo</button>
+        <button class="btn btn--primary" id="btn-new-project">+ Create project</button>
+      </div>
+    </div>
+    <div class="projects-grid" id="projects-grid"></div>
+  </div>
+  <!-- DETAIL -->
+  <div id="project-detail" class="hidden"></div>
+</main>
+
+<!-- ================= SIMULATOR ================= -->
+<main class="container page" id="page-simulator">
+  <div class="page-head">
+    <div>
+      <div class="page-head__eyebrow">Two-stage assignment rule engine</div>
+      <h1>Customer auto-assignment</h1>
+      <p>New customer enters the client DB → <b>Stage 1</b> routes to a project (sales line) by priority →
+      <b>Stage 2</b> routes to a zone (only if the project has zones). Zone-less lines stay pan-India.</p>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="section-label">1 · New customer attributes</div>
+      <div class="sample-row">
+        <button class="sample-chip" data-sample="kv">KV School (1200 branches)</button>
+        <button class="sample-chip" data-sample="oxford">Oxford (campaign inbound)</button>
+        <button class="sample-chip" data-sample="direct">Local school, Ahmedabad</button>
+        <button class="sample-chip" data-sample="acad">Existing school, 0–1yr (orders)</button>
+        <button class="sample-chip" data-sample="inside">Inbound, non-focus city</button>
+      </div>
+      <div class="field">
+        <label class="field__label">School / customer name</label>
+        <input class="input" id="cust-name" placeholder="e.g. Kendriya Vidyalaya" />
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label class="field__label">Branch count</label>
+          <input class="input" id="cust-branches" type="number" value="1" min="0" />
+        </div>
+        <div class="field">
+          <label class="field__label">Engagement type</label>
+          <select class="select" id="cust-engagement">
+            <option value="inbound">Inbound</option>
+            <option value="outbound">Outbound</option>
+          </select>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label class="field__label">Lead source</label>
+          <select class="select" id="cust-source">
+            <option value="campaign">Campaign</option>
+            <option value="website">Website</option>
+            <option value="cold_call">Cold call</option>
+            <option value="referral">Referral</option>
+            <option value="event">Event</option>
+            <option value="walk_in">Walk-in</option>
+          </select>
+        </div>
+        <div class="field">
+          <label class="field__label">City <span class="muted">(→ zone)</span></label>
+          <select class="select" id="cust-city"></select>
+        </div>
+      </div>
+      <div class="field">
+        <label class="field__label">Account stage <span class="muted">(derived from orders)</span></label>
+        <select class="select" id="cust-account">
+          <option value="none">No orders yet (new acquisition)</option>
+          <option value="new_0_1yr">Existing · 0–1 year</option>
+          <option value="mature_2yr_plus">Existing · 2+ years</option>
+        </select>
+        <div class="field__hint">ACAD parameters are fetched from the order history, not entered manually.</div>
+      </div>
+      <button class="btn btn--primary btn--block" id="btn-run-engine">Add to client DB &amp; route lead →</button>
+    </div>
+
+    <div class="card">
+      <div class="section-label">2 · Engine evaluation</div>
+      <div id="eval-output"><p class="muted" style="font-size:var(--text-body-sm)">Add a customer to see how the rules engine routes it.</p></div>
+      <div id="result-output"></div>
+    </div>
+  </div>
+
+  <div class="card mt-16">
+    <div class="flex-between mb-8">
+      <div class="section-label" style="margin:0;">Routed leads</div>
+      <span class="muted" style="font-size:var(--text-body-sm)">Every routed lead starts at <b>S0</b> and follows the same S0–S7 pipeline.</span>
+    </div>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr><th>Lead</th><th>Stage-1 · Project</th><th>Stage-2 · Zone</th><th>Owner</th><th>Pipeline</th><th>Handoff</th></tr>
+        </thead>
+        <tbody id="leads-tbody">
+          <tr><td colspan="6" class="muted" style="text-align:center;padding:24px;">No leads routed yet.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</main>
+
+<!-- ================= WORKFLOW ================= -->
+<main class="container page" id="page-workflow">
+  <div class="page-head">
+    <div>
+      <div class="page-head__eyebrow">Constant across every project</div>
+      <h1>S0–S7 lead workflow</h1>
+      <p>The pipeline is fixed and decoupled from team structure. Whichever project or zone a lead belongs to,
+      it runs the same seven stages. Reorganize teams → change projects, zones &amp; parameters, never the pipeline.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="pipeline" id="pipeline-full"></div>
+  </div>
+
+  <div class="card mt-16">
+    <div class="section-label">Inside → Direct handoff &amp; re-plug rule</div>
+    <p class="muted" style="font-size:var(--text-body-sm);margin-bottom:16px;">
+    Inside Sales works a lead through <b>S0–S2</b>. At S2 the city is checked:</p>
+    <div class="handoff">
+      <div class="handoff__lane">
+        <div class="handoff__pill">Inside Sales · S0 → S1 → S2</div>
+        <div class="handoff__branch">
+          <div class="handoff__path handoff__path--move">
+            <span class="handoff__cond">City ∈ 22 focus cities</span>
+            <span class="handoff__arrow">→</span>
+            <span class="handoff__dest">Re-plug to <b>Direct Sales</b> → zone by city · <span class="muted">stage continues from S2</span></span>
+          </div>
+          <div class="handoff__path handoff__path--stay">
+            <span class="handoff__cond">New / non-focus city</span>
+            <span class="handoff__arrow">→</span>
+            <span class="handoff__dest">Stays in <b>Inside Sales</b> · continues S3 → S7</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="callout mt-16">
+      <span>ℹ️</span>
+      <span><b>General re-plug rule:</b> if a lead matches Direct's parameters (focus-22 city) at <b>any</b> stage,
+      it re-plugs into the Direct zone list – without resetting the stage. Parameters are evaluated continuously, not only at creation.</span>
+    </div>
+  </div>
+
+  <div class="card mt-16">
+    <div class="section-label">ACAD Sales – retention ownership</div>
+    <div class="grid-2">
+      <div class="metric-note">
+        <span class="chip chip--type" data-type="acad">0–1 year</span>
+        <p>New school cohort. The <b>0–1yr sales team owns the retention metric</b> through onboarding year.</p>
+      </div>
+      <div class="metric-note">
+        <span class="chip chip--type" data-type="acad">2+ years</span>
+        <p>Mature cohort. <b>2+yr ACAD team owns the sale metric</b> (renewal / upsell ownership transfers here).</p>
+      </div>
+    </div>
+    <div class="callout mt-16">
+      <span>ℹ️</span>
+      <span>ACAD parameters (cohort age, large-account flag) are <b>fetched from the order history</b> and mapped to the ACAD BU – not captured manually at lead creation.</span>
+    </div>
+  </div>
+</main>
+
+<!-- ================= PROJECT MODAL ================= -->
+<div class="modal-overlay" id="project-modal">
+  <div class="modal modal--wide">
+    <div class="modal__head">
+      <div>
+        <h2 id="modal-title">Create project</h2>
+        <div class="modal__sub">Define the sales line, its parameter metadata, zones and the people who own it.</div>
+      </div>
+      <button class="icon-btn" data-close-modal>✕</button>
+    </div>
+    <div class="modal__body">
+      <div class="section-label">Project basics</div>
+      <div class="field-row">
+        <div class="field">
+          <label class="field__label">Project name (sales line)</label>
+          <input class="input" id="f-name" placeholder="e.g. Direct Sales" />
+        </div>
+        <div class="field" style="max-width:160px;">
+          <label class="field__label">Key</label>
+          <input class="input" id="f-key" placeholder="DIR" maxlength="6" />
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label class="field__label">Project type</label>
+          <select class="select" id="f-type">
+            <option value="direct">Direct sales</option>
+            <option value="inside">Inside sales</option>
+            <option value="key_account">Key accounts</option>
+            <option value="acad">ACAD sales</option>
+            <option value="digital">Digital sales</option>
+          </select>
+        </div>
+        <div class="field">
+          <label class="field__label">BU / Business owner</label>
+          <select class="select" id="f-owner"></select>
+        </div>
+      </div>
+
+      <div class="section-label">Structure</div>
+      <label class="switch-row">
+        <span class="switch"><input type="checkbox" id="f-zoned" /><span class="switch__track"></span></span>
+        <span>
+          <b>This project has zones</b> (Div/ZM layer)
+          <span class="people-opt__role">Turn off for zone-less, pan-India lines like Digital sales</span>
+        </span>
+      </label>
+
+      <div id="zones-config" class="mt-16">
+        <p class="field__hint" style="margin-bottom:8px;">Include zones and assign a Zone Manager (Div head) to each.</p>
+        <div id="zones-list"></div>
+      </div>
+
+      <div class="section-label">Parameter metadata – defines which customers route here</div>
+      <p class="field__hint" style="margin-bottom:12px;">All rules must match (AND). Empty = default/manual queue. Priority across lines: key account → ACAD → digital → direct → inside.</p>
+      <div id="rules-list"></div>
+      <button class="btn btn--secondary btn--sm" id="btn-add-rule">+ Add parameter rule</button>
+
+      <div class="section-label">RMs (members)</div>
+      <p class="field__hint" style="margin-bottom:8px;">Select the RMs who work this project.</p>
+      <div class="people-grid" id="members-grid"></div>
+    </div>
+    <div class="modal__foot">
+      <button class="btn btn--ghost" id="btn-delete-project" style="display:none;">Dismantle project</button>
+      <div style="display:flex;gap:8px;margin-left:auto;">
+        <button class="btn btn--secondary" data-close-modal>Cancel</button>
+        <button class="btn btn--primary" id="btn-save-project">Save project</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast-wrap" id="toast-wrap"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
